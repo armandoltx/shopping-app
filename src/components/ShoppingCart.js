@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Panel, Table, Button, Glyphicon } from 'react-bootstrap';
-import store from '../store';
 import { removeFromCart } from '../actionCreators';
 
 const styles = {
@@ -11,27 +11,13 @@ const styles = {
 
 
 class ShoppingCart extends Component {
-  constructor() {
-    super();
-    this.removeFromCart = this.removeFromCart.bind(this);
-
-    this.state = {
-      cart: []
-    }
-
-    store.subscribe(() => {
-      this.setState({
-        cart: store.getState().cart,
-      });
-    });
-  }
 
   render() {
     return (
       <Panel header="Shopping Cart">
         <Table fill>
           <tbody>
-            {this.state.cart.map(product =>
+            {this.props.cart.map(product =>
               <tr key={product.id}>
                 <td>{product.name}</td>
                 <td className="text-right">${product.price}</td>
@@ -42,7 +28,7 @@ class ShoppingCart extends Component {
           <tfoot>
             <tr>
               <td colSpan="4" style={styles.footer}>
-                Total: ${this.state.cart.reduce((sum, product) => sum + product.price, 0)}
+                Total: ${this.props.cart.reduce((sum, product) => sum + product.price, 0)}
               </td>
             </tr>
           </tfoot>
@@ -59,4 +45,10 @@ class ShoppingCart extends Component {
   }
 }
 
-export default ShoppingCart;
+const mapsStateToProps = (state) => {
+  return{
+    cart: state.cart,
+  };
+};
+
+export default connect(mapsStateToProps, mapDispatch)(ShoppingCart);
