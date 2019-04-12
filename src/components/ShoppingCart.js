@@ -21,7 +21,7 @@ class ShoppingCart extends Component {
               <tr key={product.id}>
                 <td>{product.name}</td>
                 <td className="text-right">${product.price}</td>
-                <td className="text-right"><Button bsSize="xsmall" bsStyle="danger" onClick={() => this.removeFromCart(product)}><Glyphicon glyph="trash" /></Button></td>
+                <td className="text-right"><Button bsSize="xsmall" bsStyle="danger" onClick={() => this.props.removeFromCart(product)}><Glyphicon glyph="trash" /></Button></td>
               </tr>
             )}
           </tbody>
@@ -37,18 +37,20 @@ class ShoppingCart extends Component {
       </Panel>
     )
   }
-
-  // Esta es la action creada para REMOVE_FROM_CART
-  removeFromCart(product) {
-    store.dispatch(removeFromCart(product));
-
-  }
 }
 
 const mapsStateToProps = (state) => {
-  return{
+  return {
     cart: state.cart,
   };
 };
 
-export default connect(mapsStateToProps, mapDispatch)(ShoppingCart);
+const mapDispatchToProps = (dispatch) => {
+  return {
+    removeFromCart(product) {
+      dispatch(removeFromCart(product));
+    }
+  };
+};
+
+export default connect(mapsStateToProps, mapDispatchToProps)(ShoppingCart);
