@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Panel, Table, Button, Glyphicon } from 'react-bootstrap';
 import { removeFromCart } from '../actionCreators';
@@ -9,34 +9,31 @@ const styles = {
   }
 }
 
+const ShoppingCart = ({ cart, removeFromCart }) => {
 
-class ShoppingCart extends Component {
-
-  render() {
-    return (
-      <Panel header="Shopping Cart">
-        <Table fill>
-          <tbody>
-            {this.props.cart.map(product =>
-              <tr key={product.id}>
-                <td>{product.name}</td>
-                <td className="text-right">${product.price}</td>
-                <td className="text-right"><Button bsSize="xsmall" bsStyle="danger" onClick={() => this.props.removeFromCart(product)}><Glyphicon glyph="trash" /></Button></td>
-              </tr>
-            )}
-          </tbody>
-          <tfoot>
-            <tr>
-              <td colSpan="4" style={styles.footer}>
-                Total: ${this.props.cart.reduce((sum, product) => sum + product.price, 0)}
-              </td>
+  return (
+    <Panel header="Shopping Cart">
+      <Table fill>
+        <tbody>
+          {cart.map(product =>
+            <tr key={product.id}>
+              <td>{product.name}</td>
+              <td className="text-right">${product.price}</td>
+              <td className="text-right"><Button bsSize="xsmall" bsStyle="danger" onClick={() => removeFromCart(product)}><Glyphicon glyph="trash" /></Button></td>
             </tr>
-          </tfoot>
-        </Table>
+          )}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colSpan="4" style={styles.footer}>
+              Total: ${cart.reduce((sum, product) => sum + product.price, 0)}
+            </td>
+          </tr>
+        </tfoot>
+      </Table>
 
-      </Panel>
-    )
-  }
+    </Panel>
+  );
 }
 
 const mapsStateToProps = (state) => {
